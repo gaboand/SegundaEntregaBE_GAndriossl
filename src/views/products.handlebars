@@ -1,0 +1,34 @@
+<main class="container">
+<div>
+  <h1 class="title">LISTADO DE PRODUCTOS</h1>
+</div>
+
+<div class="productList">
+  {{#each products.docs}}
+    <div class="productCard">
+      <div class="cardProduct__image">
+        <img src="{{this.thumbnail}}" alt="{{this.title}}" />
+      </div>
+      <div class="cardProduct__info">
+        <h3 class="nombreProducto">{{this.title}}</h3>
+        <p class="detalleProducto">Descripcion: {{this.description}}</p>
+        <p class="detalleProducto">Precio: ${{this.price}}</p>
+        <p class="detalleProducto">Stock: {{this.stock}}</p>
+        <p class="detalleProducto">Codigo: {{this.code}}</p>
+        <p class="detalleProducto">Id Prod: {{this._id}}</p>
+
+        <div class="cartControl">
+            <p for="quantity-{{this._id}}">Cantidad:</p>
+          <div class="quantity">
+            <button class="boton_menos" type="button" onclick="updateQuantity('minus', 'quantity-{{this._id}}')">-</button>
+            <input type="number" id="quantity-{{this._id}}" name="quantity" min="1" max="{{this.stock}}" value="1" class="cantidad" />
+            <button class="boton_mas" type="button" onclick="updateQuantity('plus', 'quantity-{{this._id}}')">+</button>
+          </div>
+          <button class="addCartButton" onclick="addToCart('{{this._id}}')">Agregar al Carrito</button>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>
+</main>
+<script src="/js/products.js"></script>
