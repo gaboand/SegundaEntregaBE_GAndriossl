@@ -22,60 +22,28 @@ router.post("/login", async (req, res) => {
     req.session.user = email;
     req.session.name = result.first_name;
     req.session.last_name = result.last_name;
-    req.session.role = "admin";
+    req.session.role = "user";
     res.status(200).json({
       respuesta: "ok",
     });
-  }
+  } 
 });
 
-
-router.post(
-  "/signup",
-  passport.authenticate("register", {
-    successRedirect: "/privado",
-    failureRedirect: "/failRegister",
-  }),
-  async (req, res) => {
-    res.send({ status: "success", mesage: "user registered" });
-  }
-);
-
-router.get("/failRegister", (req, res) => {
-  res.status(400).json({
-    error: "Error al crear el usuario",
-  });
+router.post("/signup", (req, res, next) => {
+  passport.authenticate("register", (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!user) {
+      return res.status(400).json({ error: info.message });
+    }
+    return res.status(200).json({ message: "Usuario creado con éxito" });
+  })(req, res, next);
 });
 
-/*router.post("/signup", async (req, res) => {
-  console.log(req.body);
-  const { first_name, last_name, email, password, age } = req.body;
-
-  const result = await UserModel.create({
-    first_name,
-    last_name,
-    age,
-    email,
-    password: createHash(password),
-  });
-
-  if (result === null) {
-    res.status(400).json({
-      error: "Error al crear el usuario",
-    });
-  } else {
-    req.session.user = email;
-    req.session.role = "admin";
-    res.status(201).json({
-      respuesta: "Usuario creado con éxito",
-    });
-  }
-});
-
-*/
 
 router.get("/privado", auth, (req, res) => {
-  res.render("topsecret", {
+  res.render("products", {
     title: "Privado",
     user: req.session.user,
   });
@@ -84,6 +52,7 @@ router.get("/privado", auth, (req, res) => {
 router.get("/forgot", (req, res) => {
   res.render("forgot");
 });
+
 router.post("/forgot", async (req, res) => {
   const { email, newPassword } = req.body;
   const result = await UserModel.find({

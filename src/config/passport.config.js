@@ -16,10 +16,9 @@ const initializePassport = () => {
       async (req, username, password, done) => {
         const { first_name, last_name, email, age } = req.body;
         try {
-          console.log(username);
 
           const user = await User.findOne({ email: username });
-          console.log("user", user);
+
           if (user) {
             return done(null, false, { message: "User already exists" });
           }
@@ -30,7 +29,7 @@ const initializePassport = () => {
             age,
             password: createHash(password),
           };
-          console.log(newUser);
+
           let result = await User.create(newUser);
           return done(null, result);
         } catch (error) {
@@ -63,7 +62,7 @@ const initializePassport = () => {
           if (!user) {
             return done(null, false, { message: "User not found" });
           }
-          console.log("user", user);
+
           if (!isValidPassword(user.password, password)) {
             return done(null, false, { message: "Wrong password" });
           } else {

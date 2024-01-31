@@ -40,15 +40,6 @@ viewsRouter.get("/products", async (req, res) => {
     }
 });
 
-viewsRouter.get("/realtimeproducts", async (req, res) => {
-	const product = await productDB.getProducts();
-	res.render("realtime", {
-		title: "Productos en tiempo real",
-		product: product,
-		style: "css/products.css",
-	});
-});
-
 viewsRouter.get("/chat", async (req, res) => {
 	const messages = await messageDB.findMessages();
 
@@ -73,5 +64,26 @@ viewsRouter.get("/carts/:id", async (req, res) => {
         res.status(500).send(error.message);
     }
 });
+
+viewsRouter.get("/realtimeproducts", async (req, res) => {
+	const product = await productDB.getProducts();
+	res.render("realtime", {
+		title: "Productos en tiempo real",
+		product: product,
+		style: "css/products.css",
+	});
+});
+
+viewsRouter.get("/signup", (req, res) => {
+    res.render("signup", {
+      title: "Registrarse",
+    });
+  });
+
+viewsRouter.get("/login", (req, res) => {
+    res.render("login", {
+        title: "Iniciar Sesion"
+    })
+})
 
 export default viewsRouter;

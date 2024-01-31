@@ -7,10 +7,11 @@
     --border-color: #ccc;
   }
 
-  .container {
+  .container-products {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #fff;
   }
 
   .title{
@@ -137,7 +138,7 @@
   }
 
   .cantidad{
-    width: 20%;
+    width: 100px;
     box-sizing: border-box;
     margin-bottom: 10px;
     text-align: center;

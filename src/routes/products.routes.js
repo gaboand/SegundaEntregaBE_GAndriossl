@@ -25,19 +25,9 @@ productsRouter.get("/", async (req, res) => {
 		}
 		const productsData = await productDB.getPaginatedProducts(filter);
 
-		const { docs, hasPrevPage, hasNextPage, prevPage, nextPage } = //
-		productsData; //
-	  	const products = docs; //
-		console.log(products)
-		//   res.render("products", { //
-		// 	products, //
-		// 	hasPrevPage, //
-		// 	hasNextPage, //
-		// 	prevPage, //
-		// 	nextPage, //
-		// 	style: "/css/products.css", //
-		//   });
-		  console.log(products);
+		const { docs, hasPrevPage, hasNextPage, prevPage, nextPage } = 
+		productsData; 
+	  	const products = docs;
 		
 		if (products.length < 1) {
 			res.status(404).json({

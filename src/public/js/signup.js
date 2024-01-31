@@ -1,23 +1,35 @@
 async function postSignup(first_name, last_name, email, password, age) {
-    const data = {
-      first_name,
-      last_name,
-      email,
-      password,
-      age,
-    };
-  
-    const response = await fetch("/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-  
-    const result = await response.json();
-    return result;
+  const data = {
+    first_name,
+    last_name,
+    email,
+    password,
+    age,
+  };
+
+  try {
+      const response = await fetch("/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      return result;
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+  } catch (error) {
+      console.error("Error en la solicitud de registro:", error);
+      return null;
   }
+};
+
   
   const signupForm = document.getElementById("signup-form");
   
@@ -29,7 +41,7 @@ async function postSignup(first_name, last_name, email, password, age) {
     const password = document.getElementById("password").value;
     const age = document.getElementById("age").value;
     const result = await postSignup(first_name, last_name, email, password, age);
-    if (result.respuesta === "Usuario creado con éxito") {
+    if (result.message === "Usuario creado con éxito") {
       window.location.href = "/login";
     } else {
       alert("Datos incorrectos");
