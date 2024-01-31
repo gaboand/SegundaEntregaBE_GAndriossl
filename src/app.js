@@ -4,18 +4,63 @@ import handlebars from "express-handlebars";
 import IndexRouter from "./routes/index.routes.js";
 import mongoose from "mongoose";
 import { __dirname } from "./utils.js";
+import MongoStore from "connect-mongo";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
+import loginRouter from "./routes/login.routes.js";
+import signupRouter from "./routes/signup.routes.js";
+import sessionRouter from "./routes/session.routes.js";
+
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 const DB_URL = process.env.DB_URL;
+// const COOKIESECRET = process.env.CODERSECRET;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser("CoderS3CR3T"));
 app.use(express.static(__dirname + "/public"));
 
 app.engine("handlebars", handlebars.engine()); 
 app.set("views", __dirname + "/views"); 
 app.set("view engine", "handlebars");
+
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl: DB_URL,
+      mongoOptions: {
+        useNewUrlParser: true,
+      },
+      ttl: 3600,
+    }),
+    secret: "CoderSecret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/", sessionRouter);
+app.use("/login", loginRouter);
+app.use("/signup", signupRouter);
+
+
+// const environment = async () => {
+//   try {
+//     await mongoose.connect(DB_URL);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// environment();
 
 const server = app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);

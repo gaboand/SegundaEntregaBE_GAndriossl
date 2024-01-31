@@ -23,7 +23,21 @@ productsRouter.get("/", async (req, res) => {
 		if (sort) {
 			filter.options.sort = { price: sort };
 		}
-		const products = await productDB.getPaginatedProducts(filter);
+		const productsData = await productDB.getPaginatedProducts(filter);
+
+		const { docs, hasPrevPage, hasNextPage, prevPage, nextPage } = //
+		productsData; //
+	  	const products = docs; //
+		console.log(products)
+		//   res.render("products", { //
+		// 	products, //
+		// 	hasPrevPage, //
+		// 	hasNextPage, //
+		// 	prevPage, //
+		// 	nextPage, //
+		// 	style: "/css/products.css", //
+		//   });
+		  console.log(products);
 		
 		if (products.length < 1) {
 			res.status(404).json({
@@ -35,6 +49,7 @@ productsRouter.get("/", async (req, res) => {
 
 		res.status(200).json({
 			success: true,
+			data: productsData,
 			data: products,
 		});
 	} catch (error) {
