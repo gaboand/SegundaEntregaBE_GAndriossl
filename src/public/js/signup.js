@@ -30,7 +30,6 @@ async function postSignup(first_name, last_name, email, password, age) {
   }
 };
 
-  
   const signupForm = document.getElementById("signup-form");
   
   signupForm.addEventListener("submit", async (event) => {

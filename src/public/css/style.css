@@ -103,3 +103,24 @@ body {
   button:hover {
     background-color: #ff5500;
   }
+
+  .forgot-password-link{
+    color: #1212dd;
+  }
+
+  .github-login-btn {
+    display: inline-block;
+    background-color: #000;
+    color: #fff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+.github-login-btn:hover {
+    background-color: #555;
+}
+
+.forgot-password-title{
+    color: #fdfdfd;
+}

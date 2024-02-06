@@ -7,6 +7,7 @@ async function postLogin(email, password) {
       body: JSON.stringify({ email, password }),
     });
     const data = await response.json();
+    
     if (data.respuesta === "ok") {
       window.location.href = "/products";
     } else {

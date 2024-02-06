@@ -9,7 +9,9 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
+import initializePassportGH from "./config/passportGithub.config.js";
 import sessionRouter from "./routes/session.routes.js";
+
 
 
 const app = express();
@@ -42,10 +44,13 @@ app.use(
 );
 
 initializePassport();
+initializePassportGH();
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", sessionRouter);
+app.use("/api/session", sessionRouter);
 
 const server = app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);

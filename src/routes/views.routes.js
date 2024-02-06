@@ -26,17 +26,20 @@ viewsRouter.get("/products", async (req, res) => {
             ...(category && { category: category }),
         }
     };
+        try {
+            const products = await productDB.getPaginatedProducts(filter);
+            res.render("products", {
+                title: "Listado de productos",
+                products: products,
+                style: "css/products.css",
+                user: req.session.user,
+                name: req.session.name,
+                lastName: req.session.last_name,
+                welcomeMessage: `Bienvenido/a, ${req.session.name} ${req.session.last_name}!`
+            });
 
-    try {
-        const products = await productDB.getPaginatedProducts(filter);
-        res.render("products", {
-            title: "Listado de productos",
-            products: products,
-            style: "css/products.css",
-        });
-
-    } catch (error) {
-        res.status(500).send("Error al recuperar los productos");
+        } catch (error) {
+            res.status(500).send("Error al recuperar los productos");
     }
 });
 

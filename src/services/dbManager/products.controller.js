@@ -26,9 +26,6 @@ export default class ProductDB {
 
 			const product = await ProductsModel.paginate(filter.query, filter.options);
             
-			// product.status = "success";
-            // console.log(product);
-            
 			return product;
 		} catch (error) {
 			throw error;

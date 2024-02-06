@@ -29,6 +29,7 @@ router.post("/login", async (req, res) => {
   } 
 });
 
+
 router.post("/signup", (req, res, next) => {
   passport.authenticate("register", (err, user, info) => {
     if (err) {
@@ -42,6 +43,20 @@ router.post("/signup", (req, res, next) => {
 });
 
 
+router.get("/privado", (req, res) => { 
+  if (req.session.user) { 
+      res.render("products", {
+          title: "Productos",
+          user: req.session.user,
+          name: req.session.name,
+          lastName: req.session.last_name,
+          welcomeMessage: `Bienvenido/a, ${req.session.user} ${req.session.last_name}!`
+      });
+  } else {
+      res.redirect("/login");
+  }
+});
+
 router.get("/privado", auth, (req, res) => {
   res.render("products", {
     title: "Privado",
@@ -49,28 +64,60 @@ router.get("/privado", auth, (req, res) => {
   });
 });
 
-router.get("/forgot", (req, res) => {
-  res.render("forgot");
+router.get('/forgot', (req, res) => {
+  res.render('forgot');
 });
 
-router.post("/forgot", async (req, res) => {
-  const { email, newPassword } = req.body;
-  const result = await UserModel.find({
-    email: email,
-  });
 
-  if (result.length === 0) {
-    return res.status(401).json({
-      error: "Usuario o contraseña incorrectos",
-    });
-  } else {
-    const respuesta = await UserModel.findByIdAndUpdate(result[0]._id, {
-      password: createHash(newPassword),
-    });
-    res.status(200).json({
-      respuesta: "ok",
-      datos: respuesta,
-    });
+router.post('/forgot', async (req, res) => {
+  const { email, newPassword } = req.body;
+  try {
+      const user = await UserModel.findOne({ email: email });
+      if (!user) {
+          return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+      }
+      const hashedPassword = createHash(newPassword); 
+      await UserModel.updateOne({ email: email }, { $set: { password: hashedPassword } });
+      res.json({ success: true, message: "ok" });
+       
+  } catch (error) {
+      console.error("Error al actualizar la contraseña:", error);
+      res.status(500).send('Error al procesar tu solicitud');
   }
 });
+
+
+router.get('/logout', (req, res) => {
+  req.logout(function(err) {
+      if (err) { return next(err); }
+      req.session.destroy(function(err) {
+          if (err) {
+              console.log("Error al destruir la sesión:", err);
+          }
+          res.redirect('/login');
+      });
+  });
+});
+
+
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (req, res) => {}
+);
+
+
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = req.user.email;
+    req.session.user = req.user.username || req.user.email;
+    req.session.name = req.user.first_name || req.user.email;; 
+    req.session.last_name = req.user.last_name || '';
+    req.session.admin = true;
+    res.redirect("/products");
+  }
+);
+
 export default router;
