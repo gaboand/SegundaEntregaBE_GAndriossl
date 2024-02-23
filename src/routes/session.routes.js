@@ -1,34 +1,10 @@
 import { Router } from "express";
 import UserModel from "../dao/models/user.model.js";;
 import { auth } from "../middlewares/index.js";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword, generateToken, passportCall, authorization } from "../utils.js";
 import passport from "passport";
 
 const router = Router();
-
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  const result = await UserModel.findOne({ email });
-
-  if (result === null) {
-    res.status(400).json({
-      error: "Usuario o contraseña incorrectos",
-    });
-  } else if (!isValidPassword(result.password, password)) {
-    res.status(401).json({
-      error: "Usuario o contraseña incorrectos",
-    });
-  } else {
-    req.session.user = email;
-    req.session.name = result.first_name;
-    req.session.last_name = result.last_name;
-    req.session.role = "user";
-    res.status(200).json({
-      respuesta: "ok",
-    });
-  } 
-});
-
 
 router.post("/signup", (req, res, next) => {
   passport.authenticate("register", (err, user, info) => {
@@ -42,6 +18,90 @@ router.post("/signup", (req, res, next) => {
   })(req, res, next);
 });
 
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  const user = await UserModel.findOne({ email });
+
+  if (user === null) {
+    res.status(400).json({
+      error: "Usuario o contraseña incorrectos",
+    });
+  } else if (!isValidPassword(user.password, password)) {
+    res.status(401).json({
+      error: "Usuario o contraseña incorrectos",
+    });
+  } else {
+
+    req.login(user, function(err) {
+      if (err) { return next(err); }
+
+      req.session.user = email;
+      req.session.name = user.first_name;
+      req.session.last_name = user.last_name;
+      req.session.role = "user";
+      res.status(200).json({
+        respuesta: "ok",
+        cartId: user.cartId 
+      });
+    });
+  } 
+});
+
+
+router.get(
+  "/github",
+  passport.authenticate("github", { scope: ["user:email"] }),
+  async (req, res) => {}
+);
+
+router.get(
+  "/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = req.user.email;
+    req.session.user = req.user.username || req.user.email;
+    req.session.name = req.user.first_name || req.user.email;; 
+    req.session.last_name = req.user.last_name || '';
+    req.session.admin = true;
+    res.redirect("/products");
+  }
+);
+
+
+ router.post("/loginJWT", (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    res.status(400).json({ error: "Faltan datos" });
+  }
+  if (username === "coder@coder.com" && password === "1234") {
+    const myToken = generateToken({ username });
+    res
+      .cookie("coderCookieToken", myToken, {
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+      })
+      .status(200)
+      .json({ status: "success", token: myToken });
+  } else {
+    res.status(401).json({ error: "Usuario o contraseña incorrectos" });
+  }
+});
+
+router.get("/current", passportCall("jwt"), authorization("admin"), (req, res) => {
+  res.status(200).json(req.user);
+});
+
+router.get('/logout', (req, res) => {
+  req.logout(function(err) {
+      if (err) { return next(err); }
+      req.session.destroy(function(err) {
+          if (err) {
+              console.log("Error al destruir la sesión:", err);
+          }
+          res.redirect('/login');
+      });
+  });
+});
 
 router.get("/privado", (req, res) => { 
   if (req.session.user) { 
@@ -64,10 +124,10 @@ router.get("/privado", auth, (req, res) => {
   });
 });
 
+
 router.get('/forgot', (req, res) => {
   res.render('forgot');
 });
-
 
 router.post('/forgot', async (req, res) => {
   const { email, newPassword } = req.body;
@@ -85,39 +145,5 @@ router.post('/forgot', async (req, res) => {
       res.status(500).send('Error al procesar tu solicitud');
   }
 });
-
-
-router.get('/logout', (req, res) => {
-  req.logout(function(err) {
-      if (err) { return next(err); }
-      req.session.destroy(function(err) {
-          if (err) {
-              console.log("Error al destruir la sesión:", err);
-          }
-          res.redirect('/login');
-      });
-  });
-});
-
-
-router.get(
-  "/github",
-  passport.authenticate("github", { scope: ["user:email"] }),
-  async (req, res) => {}
-);
-
-
-router.get(
-  "/githubcallback",
-  passport.authenticate("github", { failureRedirect: "/login" }),
-  async (req, res) => {
-    req.session.user = req.user.email;
-    req.session.user = req.user.username || req.user.email;
-    req.session.name = req.user.first_name || req.user.email;; 
-    req.session.last_name = req.user.last_name || '';
-    req.session.admin = true;
-    res.redirect("/products");
-  }
-);
 
 export default router;

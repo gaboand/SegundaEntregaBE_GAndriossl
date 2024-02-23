@@ -1,9 +1,11 @@
 <main class="cart__container">
   <div>
     <h1 class="cart__title">Detalle del Carrito</h1>
+    <a class="carritoButton" href="/logout">Cerrar Sesión</a> 
+    <button onclick="window.history.back();" class="carritoButton">Volver</button>
   </div>
   <div class="cart__total">
-    <button class="cart_vaciarCart" onclick="emptyCart()">Vaciar Carrito</button>
+    <button class="carritoButton" onclick="emptyCart()">Vaciar Carrito</button>
   </div>
 
   <div class="cart__productList">

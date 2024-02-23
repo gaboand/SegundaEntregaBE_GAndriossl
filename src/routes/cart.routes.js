@@ -23,6 +23,20 @@ cartsRouter.post("/", async (req, res) => {
 	}
 });
 
+cartsRouter.get("/:cartId", async (req, res) => {
+    const { cartId } = req.params;
+    try {
+        const cart = await CartModel.findById(cartId);
+        if (!cart) {
+            return res.status(404).send("Carrito no encontrado");
+        }
+        res.json(cart);
+    } catch (error) {
+        res.status(500).send("Error al recuperar el carrito: " + error.message);
+    }
+});
+
+
 cartsRouter.get("/", async (req, res) => {
     try {
         const { limit } = req.query;

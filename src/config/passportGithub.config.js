@@ -1,5 +1,6 @@
 import passport from "passport";
 import User from "../dao/models/user.model.js";
+import { CartModel } from "../dao/models/carts.model.js";
 import GitHubStrategy from "passport-github2";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
@@ -17,21 +18,23 @@ const initializePassportGH = () => {
       }, async (accessToken, refreshToken, profile, done) => {
           try {
             const email = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : null;
+            if (!email) {
+              return done(new Error("No se pudo obtener el correo electrónico de GitHub."), null);
+            }
 
-        if (!email) {
-          return done(new Error("Tu cuenta de GitHub no tiene un correo electrónico público"), null);
-        }
-            let user = await User.findOne({ email: email })
+            let user = await User.findOne({ email: email });
             if (!user) {
+              const newCart = await CartModel.create({});
               const newUser = {
-                first_name: profile.displayName.split(" ")[0],
-                last_name: profile.displayName.split(" ")[1],
-                email: profile?.emails[0]?.value,
+                first_name: profile.displayName.split(" ")[0] || 'GitHub User', 
+                last_name: profile.displayName.split(" ")[1] || '',
+                email: email, 
                 age: 18,
-                password: Math.random().toString(36).substring(7),
+                password: Math.random().toString(36).substring(7), 
+                cartId: newCart._id, 
               };
-              let result = await User.create(newUser);
-              done(null, result);
+              user = await User.create(newUser); 
+              done(null, user);
             } else {
               done(null, user);
             }
@@ -48,12 +51,12 @@ const initializePassportGH = () => {
   
     passport.deserializeUser(async (id, done) => {
       try {
-        let user = await User.findById(id);
+        const user = await User.findById(id);
         done(null, user);
       } catch (err) {
         done(err, null);
       }
     });
-  };
-  
-  export default initializePassportGH;
+};
+
+export default initializePassportGH;

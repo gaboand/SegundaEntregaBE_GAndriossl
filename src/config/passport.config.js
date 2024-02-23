@@ -1,6 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import User from "../dao/models/user.model.js";
+import { CartModel } from "../dao/models/carts.model.js"; 
 import { createHash, isValidPassword } from "../utils.js";
 
 const LocalStrategy = local.Strategy;
@@ -16,24 +17,26 @@ const initializePassport = () => {
       async (req, username, password, done) => {
         const { first_name, last_name, email, age } = req.body;
         try {
-
           const user = await User.findOne({ email: username });
-
           if (user) {
-            return done(null, false, { message: "User already exists" });
+            return done(null, false, { message: "El usuario ya existe" });
           }
+
+          const newCart = await CartModel.create({});
+
           const newUser = {
             first_name,
             last_name,
             email,
             age,
-            password: createHash(password),
+            password: createHash(password), 
+            cartId: newCart._id, 
           };
 
-          let result = await User.create(newUser);
+          const result = await User.create(newUser);
           return done(null, result);
         } catch (error) {
-          return done("Error al obtener el usuario", error);
+          return done("Error al crear el usuario", error);
         }
       }
     )
@@ -54,17 +57,17 @@ const initializePassport = () => {
       {
         passReqToCallback: true,
         usernameField: "email",
-        passwordField: "password",
+        passwordField: "password", 
       },
       async (req, username, password, done) => {
         try {
           const user = await User.findOne({ email: username });
           if (!user) {
-            return done(null, false, { message: "User not found" });
+            return done(null, false, { message: "Usuario no encontrado" });
           }
 
           if (!isValidPassword(user.password, password)) {
-            return done(null, false, { message: "Wrong password" });
+            return done(null, false, { message: "Contraseña incorrecta" });
           } else {
             return done(null, user);
           }

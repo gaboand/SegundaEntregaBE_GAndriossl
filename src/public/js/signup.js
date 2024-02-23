@@ -43,6 +43,6 @@ async function postSignup(first_name, last_name, email, password, age) {
     if (result.message === "Usuario creado con éxito") {
       window.location.href = "/login";
     } else {
-      alert("Datos incorrectos");
+      alert("El usuario ya existe");
     }
   });

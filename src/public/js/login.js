@@ -9,6 +9,7 @@ async function postLogin(email, password) {
     const data = await response.json();
     
     if (data.respuesta === "ok") {
+      localStorage.setItem('cartId', data.cartId);
       window.location.href = "/products";
     } else {
       alert("Datos incorrectos");

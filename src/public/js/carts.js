@@ -1,7 +1,10 @@
+function getCartId() {
+    return localStorage.getItem('cartId');
+}
 
 function emptyCart() {
     if (confirm("¿Estás seguro de que quieres vaciar el carrito?")) {
-        const cartId = "65b5ee2e97c0d595395c3355";
+        const cartId = getCartId();
 
         fetch(`/api/carts/${cartId}/empty`, { method: 'DELETE' })
             .then(response => response.json())
@@ -14,16 +17,13 @@ function emptyCart() {
             })
             .catch(error => console.error('Error:', error));
     } else {
-
-        console.log("el usuario prefirió no vaciar el carrito");
+        console.log("El usuario prefirió no vaciar el carrito");
     }
 }
 
-
 function deleteProductFromCart(productId) {
-
     if (confirm("¿Deseas eliminar este producto del carrito?")) {
-        const cartId = "65b5ee2e97c0d595395c3355";
+        const cartId = getCartId(); 
 
         fetch(`/api/carts/${cartId}/product/${productId}`, { method: 'DELETE' })
             .then(response => response.json())
@@ -55,7 +55,7 @@ function updateCartQuantity(action, productId) {
 }
 
 function updateQuantityOnServer(productId, newQuantity) {
-    const cartId = "65b5ee2e97c0d595395c3355";
+    const cartId = getCartId();
 
     fetch(`/api/carts/${cartId}/product/${productId}/quantity`, {
         method: 'PUT',
@@ -74,6 +74,3 @@ function updateQuantityOnServer(productId, newQuantity) {
     })
     .catch(error => console.error('Error:', error));
 };
-
-
-
