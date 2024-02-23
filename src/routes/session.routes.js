@@ -58,14 +58,15 @@ router.get(
   "/githubcallback",
   passport.authenticate("github", { failureRedirect: "/login" }),
   async (req, res) => {
-    req.session.user = req.user.email;
     req.session.user = req.user.username || req.user.email;
-    req.session.name = req.user.first_name || req.user.email;; 
+    req.session.name = req.user.first_name || req.user.email;
     req.session.last_name = req.user.last_name || '';
     req.session.admin = true;
-    res.redirect("/products");
+    const cartId = req.user.cartId;
+    res.redirect(`/products?cartId=${cartId}`);
   }
 );
+
 
 
  router.post("/loginJWT", (req, res) => {

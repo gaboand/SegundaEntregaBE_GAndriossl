@@ -74,3 +74,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const cartId = urlParams.get('cartId');
+    if (cartId) {
+      localStorage.setItem('cartId', cartId);
+    }
+  });

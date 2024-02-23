@@ -124,3 +124,14 @@ body {
 .forgot-password-title{
     color: #fdfdfd;
 }
+
+.forgot-form{
+    width: 300px;
+}
+
+.forgot-contenedor{
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}

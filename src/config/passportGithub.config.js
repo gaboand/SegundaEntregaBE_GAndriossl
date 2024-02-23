@@ -25,21 +25,21 @@ const initializePassportGH = () => {
             let user = await User.findOne({ email: email });
             if (!user) {
               const newCart = await CartModel.create({});
-              const newUser = {
-                first_name: profile.displayName.split(" ")[0] || 'GitHub User', 
+              user = new User({ 
+                first_name: profile.displayName.split(" ")[0] || 'GitHub User',
                 last_name: profile.displayName.split(" ")[1] || '',
-                email: email, 
+                email: email,
                 age: 18,
                 password: Math.random().toString(36).substring(7), 
                 cartId: newCart._id, 
-              };
-              user = await User.create(newUser); 
-              done(null, user);
+              });
+              await user.save();
+              return done(null, user); 
             } else {
-              done(null, user);
+              return done(null, user);
             }
           } catch (err) {
-            done(err, null);
+            return done(err, null); 
           }
         }
       )

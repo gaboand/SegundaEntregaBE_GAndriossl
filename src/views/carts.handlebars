@@ -5,37 +5,42 @@
     <button onclick="window.history.back();" class="carritoButton">Volver</button>
   </div>
   <div class="cart__total">
+      <div class="cart__summary">
+        <h2>Resumen del Carrito</h2>
+        <p>Cantidad de Productos: {{detailedCart.totalProducts}}</p>
+        <p>Total: ${{detailedCart.total}}</p>
+      </div>
     <button class="carritoButton" onclick="emptyCart()">Vaciar Carrito</button>
   </div>
 
-  <div class="cart__productList">
-    {{#each detailedCart}}
-    <div class="cart__productCard">
-        <div class="cart__cardProduct__image">
-          <img src="{{this.productId.thumbnail}}" alt="{{this.productId.title}}" />
+  {{!-- Asumiendo que detailedCart.products contiene el arreglo de productos --}}
+<div class="cart__productList">
+  {{#each detailedCart.products}}
+  <div class="cart__productCard">
+      <div class="cart__cardProduct__image">
+        <img src="{{this.productId.thumbnail}}" alt="{{this.productId.title}}" />
+      </div>
+        <div>
+          <h3 class="cart__nombreProducto">{{this.productId.title}}</h3>
+          <p class="cart__detalleProducto">{{this.productId.description}}</p>
+          <p class="cart__detalleProducto">Precio: ${{this.productId.price}}</p>
+          <p class="cart__detalleProducto">Cantidad: {{this.quantity}}</p>
+            <div class="cartControl">
+              <button class="boton_menos" type="button" onclick="updateCartQuantity('minus', '{{this.productId._id}}')">-</button>
+              <input type="number" id="quantity-{{this.productId._id}}" name="quantity" min="1" value="{{this.quantity}}" class="cantidad" />
+              <button class="boton_mas" type="button" onclick="updateCartQuantity('plus', '{{this.productId._id}}')">+</button>
+            </div>
         </div>
-          <div>
-            <h3 class="cart__nombreProducto">{{this.productId.title}}</h3>
-            <p class="cart__detalleProducto">{{this.productId.description}}</p>
-            <p class="cart__detalleProducto">Precio: ${{this.productId.price}}</p>
-            <p class="cart__detalleProducto">Cantidad: {{this.quantity}}</p>
-            <p class="cart__detalleProducto">Cantidad: </p>
-              <div class="cartControl">
-                <button class="boton_menos" type="button" onclick="updateCartQuantity('minus', '{{this.productId._id}}')">-</button>
-                <input type="number" id="quantity-{{this.productId._id}}" name="quantity" min="1" value="{{this.quantity}}" class="cantidad" />
-                <button class="boton_mas" type="button" onclick="updateCartQuantity('plus', '{{this.productId._id}}')">+</button>
-              </div>
-          </div>
 
-        
-        <div class="cart__cardProduct__delete">
-          <button class="cart__btnDelete" data-id="{{this._id}}" onclick="deleteProductFromCart('{{this._id}}')">X</button>
-        </div>
-     </div>
-        {{/each}}
-        {{#unless detailedCart.length}}
-          <p>No hay productos en el carrito.</p>
-        {{/unless}}
-  </div>
+      <div class="cart__cardProduct__delete">
+        <button class="cart__btnDelete" data-id="{{this._id}}" onclick="deleteProductFromCart('{{this._id}}')">X</button>
+      </div>
+   </div>
+      {{/each}}
+      {{#unless detailedCart.products.length}}
+        <p>No hay productos en el carrito.</p>
+      {{/unless}}
+</div>
+
 </main>
   <script src="/js/carts.js"></script>

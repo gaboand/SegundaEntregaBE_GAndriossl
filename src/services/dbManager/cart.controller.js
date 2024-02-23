@@ -44,8 +44,18 @@ export default class CartDB {
             if (!cart) {
                 throw new Error("Carrito no encontrado");
             }
+            let total = 0;
+            let totalProducts = 0;
     
-            return cart.products;
+            cart.products.forEach(product => {
+                total += product.productId.price * product.quantity;
+                totalProducts += product.quantity;
+            });
+    
+            cart.total = total;
+            cart.totalProducts = totalProducts;
+    
+            return cart;
         } catch (error) {
             throw error;
         }
