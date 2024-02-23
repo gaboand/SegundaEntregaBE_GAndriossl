@@ -79,9 +79,9 @@ function updateQuantityOnServer(productId, newQuantity) {
     .catch(error => console.error('Error:', error));
 }
 
-// Función para actualizar la UI con el total y la cantidad de productos en el carrito
+
 function updateCartUI(cart) {
-    // Suponiendo que tienes elementos en tu HTML para mostrar estos valores
+
     const totalElement = document.getElementById('cartTotal');
     const quantityElement = document.getElementById('cartQuantity');
 
@@ -140,6 +140,4 @@ async function loadCartDetails() {
 }
 
 
-
-// Considera llamar a loadCartDetails() donde sea apropiado, por ejemplo, al cargar la página del carrito
 document.addEventListener('DOMContentLoaded', loadCartDetails);
