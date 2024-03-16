@@ -8,7 +8,7 @@ async function postSignup(first_name, last_name, email, password, age) {
   };
 
   try {
-      const response = await fetch("/signup", {
+      const response = await fetch("/api/session/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

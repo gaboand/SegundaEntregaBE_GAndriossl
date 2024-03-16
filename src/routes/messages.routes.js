@@ -1,5 +1,5 @@
 import { Router } from "express";
-import  MessagesDB from "../services/dbManager/chat.controler.js";
+import  MessagesDB from "../controllers/chat.controler.js";
 
 const messagesRouter = Router();
 const messagesDB = new MessagesDB();

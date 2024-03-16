@@ -1,0 +1,1 @@
+export const PERSISTENCE = "MONGO"; // MONGO O FS

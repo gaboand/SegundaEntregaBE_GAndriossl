@@ -1,9 +1,10 @@
 import { Router } from "express";
-import CartDB from "../services/dbManager/cart.controller.js";
-import ProductDB from "../services/dbManager/products.controller.js";
-import MessageDB from "../services/dbManager/chat.controler.js";
-import ProductsManager from "../services/fs/ProductManager.js";
-import CartsManager from "../services/fs/CartManager.js";
+import CartDB from "../dao/mongo/carts.js";
+import ProductDB from "../dao/mongo/products.js";
+import MessageDB from "../controllers/chat.controler.js";
+import ProductsManager from "../dao/memory/productManager.js";
+import CartsManager from "../dao/memory/productManager.js";
+import passport from "passport";
 
 const viewsRouter = Router();
 const cartDB = new CartDB();
@@ -68,15 +69,6 @@ viewsRouter.get("/carts/:id", async (req, res) => {
     }
 });
 
-viewsRouter.get("/realtimeproducts", async (req, res) => {
-	const product = await productDB.getProducts();
-	res.render("realtime", {
-		title: "Productos en tiempo real",
-		product: product,
-		style: "css/products.css",
-	});
-});
-
 viewsRouter.get("/signup", (req, res) => {
     res.render("signup", {
       title: "Registrarse",
@@ -87,6 +79,31 @@ viewsRouter.get("/login", (req, res) => {
     res.render("login", {
         title: "Iniciar Sesion"
     })
-})
+});
+
+viewsRouter.get("/logout", (req, res) => {
+    res.redirect("/login");
+});
+
+viewsRouter.get("/forgot", (req, res) => {
+    res.render("forgot");
+});
+
+viewsRouter.get("/github",
+    passport.authenticate("github", { scope: ["user:email"] }),
+  );
+
+  viewsRouter.get("/githubcallback",
+    passport.authenticate("github", { failureRedirect: "/login" }),
+  );
+
+  viewsRouter.get("/realtimeproducts", async (req, res) => {
+	const product = await productDB.getProducts();
+	res.render("realtime", {
+		title: "Productos en tiempo real",
+		product: product,
+		style: "css/products.css",
+	});
+});
 
 export default viewsRouter;

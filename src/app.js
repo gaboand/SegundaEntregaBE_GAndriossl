@@ -12,7 +12,7 @@ import initializePassport from "./config/passport.config.js";
 import initializePassportGH from "./config/passportGithub.config.js";
 import sessionRouter from "./routes/session.routes.js";
 import initializePassportJWT from "./config/passportJWT.config.js";
-
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -50,16 +50,6 @@ initializePassportJWT();
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-app.use("/", sessionRouter);
-app.use("/api/session", sessionRouter);
-
-
-
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
-});
-
 const server = app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
@@ -72,6 +62,10 @@ app.use((req, res, next) => {
 });
 
 app.use("/", IndexRouter);
+
+app.use(cors({ 
+  origin: ["http://localhost:3000", "http://127.0.0.1:5500"]
+}));
 
 io.on("connection", (socket) => {
 	console.log("Se conecto un nuevo usuario");

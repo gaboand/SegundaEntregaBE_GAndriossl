@@ -1,12 +1,12 @@
-import { Router } from "express";
-import UserModel from "../dao/models/user.model.js";;
+import express from "express";
+import UserModel from "../dao/mongo/models/user.model.js";;
 import { auth } from "../middlewares/index.js";
 import { createHash, isValidPassword, generateToken, passportCall, authorization } from "../utils.js";
 import passport from "passport";
 
-const router = Router();
+const sessionRouter = express.Router();
 
-router.post("/signup", (req, res, next) => {
+sessionRouter.post("/signup", (req, res, next) => {
   passport.authenticate("register", (err, user, info) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -18,7 +18,7 @@ router.post("/signup", (req, res, next) => {
   })(req, res, next);
 });
 
-router.post("/login", async (req, res) => {
+sessionRouter.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await UserModel.findOne({ email });
 
@@ -47,14 +47,13 @@ router.post("/login", async (req, res) => {
   } 
 });
 
-
-router.get(
+sessionRouter.get(
   "/github",
   passport.authenticate("github", { scope: ["user:email"] }),
   async (req, res) => {}
 );
 
-router.get(
+sessionRouter.get(
   "/githubcallback",
   passport.authenticate("github", { failureRedirect: "/login" }),
   async (req, res) => {
@@ -67,9 +66,7 @@ router.get(
   }
 );
 
-
-
- router.post("/loginJWT", (req, res) => {
+sessionRouter.post("/loginJWT", (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
     res.status(400).json({ error: "Faltan datos" });
@@ -88,11 +85,19 @@ router.get(
   }
 });
 
-router.get("/current", passportCall("jwt"), authorization("admin"), (req, res) => {
-  res.status(200).json(req.user);
+sessionRouter.get("/current", passportCall("jwt"), authorization("admin"), (req, res) => { 
+    if (!req.isAuthenticated()) {
+        res.status(401).json({ message: "No hay una sesión activa" });
+    } else {
+        const session = {
+            message: "Sesión activa",
+            user: req.user,
+        };
+        res.status(200).json(session);
+    }
 });
 
-router.get('/logout', (req, res) => {
+sessionRouter.get('/logout', (req, res) => {
   req.logout(function(err) {
       if (err) { return next(err); }
       req.session.destroy(function(err) {
@@ -104,7 +109,7 @@ router.get('/logout', (req, res) => {
   });
 });
 
-router.get("/privado", (req, res) => { 
+sessionRouter.get("/privado", (req, res) => { 
   if (req.session.user) { 
       res.render("products", {
           title: "Productos",
@@ -118,19 +123,18 @@ router.get("/privado", (req, res) => {
   }
 });
 
-router.get("/privado", auth, (req, res) => {
+sessionRouter.get("/privado", auth, (req, res) => {
   res.render("products", {
     title: "Privado",
     user: req.session.user,
   });
 });
 
-
-router.get('/forgot', (req, res) => {
+sessionRouter.get('/forgot', (req, res) => {
   res.render('forgot');
 });
 
-router.post('/forgot', async (req, res) => {
+sessionRouter.post('/forgot', async (req, res) => {
   const { email, newPassword } = req.body;
   try {
       const user = await UserModel.findOne({ email: email });
@@ -147,4 +151,4 @@ router.post('/forgot', async (req, res) => {
   }
 });
 
-export default router;
+export default sessionRouter;

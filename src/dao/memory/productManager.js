@@ -1,12 +1,15 @@
 import fs from "fs";
 import crypto from "crypto";
+import path from "path";
+import { fileURLToPath } from "url";
 
 export default class ProductsManager {
 	#filePath;
 
-	constructor(filePath = "./src/products.json") {
-		this.#filePath = filePath;
-	}
+	constructor(filePath = "../../products.json") {
+        const __dirname = path.dirname(fileURLToPath(import.meta.url));
+        this.#filePath = path.join(__dirname, filePath);
+    }
 
 	allFieldsAreValid(product) {
 		if (
@@ -20,7 +23,7 @@ export default class ProductsManager {
 		}
 		return true;
 	}
-
+	
 	async getProducts() {
 		try {
 			if (fs.existsSync(this.#filePath)) {
@@ -33,7 +36,19 @@ export default class ProductsManager {
 		}
 	}
 
-	async getProductById(id) {
+	async getPaginatedProducts() {
+		try {
+			if (fs.existsSync(this.#filePath)) {
+				const products = JSON.parse(await fs.promises.readFile(this.#filePath, "utf-8"));
+				return products;
+			}
+			return [];
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	async getProductsById(id) {
 		try {
 			const products = await this.getProducts();
 
@@ -51,7 +66,7 @@ export default class ProductsManager {
 
 	async deleteProductById(id) {
 		try {
-			const product = this.getProductById(id);
+			const product = this.getProductsById(id);
 			if (!product) {
 				throw new Error(`Product with id ${id} was not found.`);
 			}
@@ -122,4 +137,19 @@ export default class ProductsManager {
 			throw error;
 		}
 	}
+
+	// async getPaginatedProducts(filter) {
+	// 	try {
+	// 		const products = await this.getProducts();
+	// 		const filteredProducts = products.filter((product) => {
+	// 			return (
+	// 				product.title.includes(filter) ||
+	// 				product.description.includes(filter)
+	// 			);
+	// 		});
+	// 		return filteredProducts;
+	// 	} catch (error) {
+	// 		throw error;
+	// 	}
+	// }
 }

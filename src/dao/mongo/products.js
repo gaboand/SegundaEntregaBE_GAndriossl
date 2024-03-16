@@ -1,9 +1,8 @@
-import { ProductsModel } from "../../dao/models/products.model.js";
+import { ProductsModel } from "../mongo/models/products.model.js";
 
 export default class ProductDB {
-
     async getProducts() { 
-        try{
+        try {
             const product = await ProductsModel.find().lean();
             return product;
         } catch (error) {
@@ -11,8 +10,17 @@ export default class ProductDB {
         }
     }
 
+    async getPaginatedProducts(filter) {
+        try {
+            filter.options.lean = true;
+            const product = await ProductsModel.paginate(filter.query, filter.options);
+            return product;
+        } catch (error) {
+            throw error;
+        }
+    }
     async getProductsById(id) {
-        try{
+        try {
             const product = await ProductsModel.findById(id).lean();
             return product;
         } catch (error) {
@@ -20,20 +28,8 @@ export default class ProductDB {
         }
     }
 
-    async getPaginatedProducts(filter) {
-		try {
-			filter.options.lean = true;
-
-			const product = await ProductsModel.paginate(filter.query, filter.options);
-            
-			return product;
-		} catch (error) {
-			throw error;
-		}
-	}
-
     async createProduct(product) {
-        try{
+        try {
             const newProduct = new ProductsModel(product);
             const products = await newProduct.save();
             return products;
@@ -60,12 +56,13 @@ export default class ProductDB {
         }
     }
     
-    async deleteProductById(id,productsUpdates) {
-        try{
+    async deleteProductById(id, productsUpdates) {
+        try {
             const product = await ProductsModel.findByIdAndDelete(id);
             return product;
         } catch (error) {
             throw error;
         }
-        }
-};
+    }
+}
+

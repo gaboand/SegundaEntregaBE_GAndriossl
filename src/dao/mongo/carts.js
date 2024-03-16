@@ -1,4 +1,4 @@
-import { CartModel } from "../../dao/models/carts.model.js"; 
+import { CartModel } from "../mongo/models/carts.model.js"; 
 
 export default class CartDB {
     async createCart(cart) {
@@ -19,20 +19,6 @@ export default class CartDB {
         throw error;
     }
     };
-
-    async getCartById(id) {
-        try {
-            const cart = await CartModel.findById(id).lean();
-    
-            if (!cart) {
-                throw new Error("Carrito no encontrado");
-            }
-    
-            return cart;
-        } catch (error) {
-            throw error;
-        }
-    }
     
     async getCartWithProductDetails(cartId) {
         try {
@@ -95,6 +81,17 @@ export default class CartDB {
         }
     }
     
+    async emptyCart(cartId) {
+        try {
+            const cart = await CartModel.findById(cartId);
+            cart.products = [];
+            const updatedCart = await cart.save();
+            return updatedCart;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async deleteCartById(id) {
         try {
             const cart = await CartModel.findById(id);
@@ -104,17 +101,6 @@ export default class CartDB {
     
             const pruebaID = await CartModel.findByIdAndDelete(id);
             return cart;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async emptyCart(cartId) {
-        try {
-            const cart = await CartModel.findById(cartId);
-            cart.products = [];
-            const updatedCart = await cart.save();
-            return updatedCart;
         } catch (error) {
             throw error;
         }

@@ -1,4 +1,4 @@
-import { MessagesModel } from "../../dao/models/messages.model.js"; 
+import { MessagesModel } from "../dao/mongo/models/messages.model.js"; 
 
 export default class MessageDB {
 

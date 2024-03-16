@@ -1,5 +1,5 @@
 async function postLogin(email, password) {
-    const response = await fetch("/login", {
+    const response = await fetch("/api/session/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

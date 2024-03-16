@@ -1,0 +1,132 @@
+[{
+    "title": "Johnnie Walker Blue Label",
+    "description": "Scotch Blend 750 ml",
+    "price": 9999,
+    "thumbnail": "https://whiskypedia.com.ar/wp-content/uploads/2019/11/JW-Blue-Label-750ml.jpg",
+    "code": "code001",
+    "stock": 10,
+    "id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+    "category": "Premium"
+  },
+  {
+    "title": "Glen Moray Elgin Classic",
+    "description": "Single Malt Scotch 700 ml",
+    "price": 119,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/b/e/be74944_hr2kmniyrfeov0xo.jpg",
+    "code": "code002",
+    "stock": 10,
+    "id": "6a59dfc3-1c51-4ec2-83aa-4ccf4d2db238",
+    "category": "Medium"
+  },
+  {
+    "title": "Macallan Whisky 18 years",
+    "description": "Double Cask 18 Scotch 700 ml",
+    "price": 959.99,
+    "thumbnail": "https://d2r9epyceweg5n.cloudfront.net/stores/118/622/products/5082377-0011-1bf5bccaae9d834b4916729397200733-640-0.webp",
+    "code": "code003",
+    "stock": 15,
+    "id": "8e666b04-6b95-4f7d-ae47-24c55f53f775",
+    "category": "Premium"
+  },
+  {
+    "title": "Royal Salute",
+    "description": "Scotch Blend 750 ml",
+    "price": 300,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/b/e/be01901_1_xjdisrqxxcoticlm.jpg",
+    "code": "code004",
+    "stock": 15,
+    "id": "76f0252e-65c8-4a45-aa9f-8e886dd6bf3e",
+    "category": "Premium"
+  },
+  {
+    "title": "Johnnie Walker Gold Label",
+    "description": "Scotch Blend 750 ml",
+    "price": 54.99,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/b/e/be72364_zrdlxfupmnxqcpzb.jpg",
+    "code": "code005",
+    "stock": 10,
+    "id": "9be54bc3-2e5d-4d3b-8d3a-2a091a2f2ea7",
+    "category": "Promo"
+  },
+  {
+    "title": "Dalmore Whisky 18 years",
+    "description": "Single Malt Scotch 700 ml",
+    "price": 459.99,
+    "thumbnail": "https://vinotecacopados.com.ar/wp-content/uploads/2022/01/vinotecacopados_whisky_dalmore_18_anios.png",
+    "code": "code006",
+    "stock": 10,
+    "id": "a041b625-938d-403e-b0f3-1b6c059d5eb2",
+    "category": "Premium"
+  },
+  {
+    "title": "Chivas Regal Hundred Cask",
+    "description": "Con estuche Scotch 700 ml",
+    "price": 659.99,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/b/e/be03339_wjrmb4d2wubqqdha.jpg",
+    "code": "code007",
+    "stock": 15,
+    "id": "ddc1a867-0b6f-45c4-ae94-9f282e2567d8",
+    "category": "Premium"
+  },
+  {
+    "title": "Chivas Regal 25 Años",
+    "description": "Scotch Blend 750 ml",
+    "price": 490,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/b/e/be70584_qdwicvmsubpsi2fc.jpg",
+    "code": "code008",
+    "stock": 15,
+    "id": "325d7f46-54ec-4a32-9462-9f00fbb18c5c",
+    "category": "Premium"
+  },
+  {
+    "title": "Glenfiddich 18 Años",
+    "description": "Scotch Blend 750 ml con estuche",
+    "price": 239.99,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/g/l/glenfiddich-18_7eqgxojxrriqoo5r.jpg",
+    "code": "code009",
+    "stock": 10,
+    "id": "4eac60a4-0d48-4f4f-a5d5-7f4e90c0514e",
+    "category": "Medium"
+  },
+  {
+    "title": "Highland Park 12 Años ",
+    "description": "Single Malt Scotch 700 ml",
+    "price": 179.99,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/b/e/be32557.jpg",
+    "code": "code010",
+    "stock": 10,
+    "id": "c785deb0-02cd-4ff1-9f03-38debd8b54cf",
+    "category": "Medium"
+  },
+  {
+    "title": "Tomatin 12 Años ",
+    "description": "Double Cask 18 Scotch 700 ml",
+    "price": 139.99,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/b/e/be75976_base_5rg9kzd5oah4ipfm.jpg",
+    "code": "code011",
+    "stock": 15,
+    "id": "80e1f559-0c3b-4704-913c-d4933b423cbf",
+    "category": "Promo"
+  },
+  {
+    "title": "Bruichladdich Classic Laddie",
+    "description": "Scotch Blend 750 ml",
+    "price": 300,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/b/e/be74941_xavxrif7tjuy1viy.jpg",
+    "code": "code012",
+    "stock": 15,
+    "id": "c763309e-6751-4088-ade3-28830f889072",
+    "category": "Medium"
+  },
+  {
+    "title": "Bruichladdich Classic Laddie",
+    "description": "Scotch Blend 750 ml",
+    "price": 300,
+    "thumbnail": "https://vinotecaligier.com/media/catalog/product/cache/73269a27812eefec516431430aa0b457/b/e/be74941_xavxrif7tjuy1viy.jpg",
+    "code": "code012",
+    "stock": 15,
+    "id": "c763309e-6751-4088-ade3-28830f889444",
+    "category": "Medium"
+  }
+
+  ]
