@@ -3,4 +3,5 @@
 
 #varios
 .env
-
+.products.copy.json
+.singleton.js

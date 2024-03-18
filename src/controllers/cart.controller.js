@@ -1,7 +1,4 @@
 import {cartsDao} from "../dao/index.js"
-// import CartDB from "../dao/mongo/carts.js";
-
-// const cartDB = new CartDB();
 
 const saveCart = async (req, res) => {
 	try {
@@ -186,12 +183,3 @@ const updateQuantity = async (req, res) => {
 };
 
 export { saveCart, getCarts, getCartDetails, addProduct, deleteProduct, empty, deleteCart, updateQuantity };
-
-
-
-
-
-
-
-
-

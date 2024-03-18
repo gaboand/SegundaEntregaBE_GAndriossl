@@ -36,13 +36,17 @@ export default class ProductsManager {
 		}
 	}
 
-	async getPaginatedProducts() {
+	async getPaginatedProducts(filter = {}) {
 		try {
 			if (fs.existsSync(this.#filePath)) {
 				const products = JSON.parse(await fs.promises.readFile(this.#filePath, "utf-8"));
-				return products;
+	
+				return {
+					docs: products,
+					totalDocs: products.length,
+				};
 			}
-			return [];
+			return { docs: [] };
 		} catch (error) {
 			throw error;
 		}
@@ -138,18 +142,4 @@ export default class ProductsManager {
 		}
 	}
 
-	// async getPaginatedProducts(filter) {
-	// 	try {
-	// 		const products = await this.getProducts();
-	// 		const filteredProducts = products.filter((product) => {
-	// 			return (
-	// 				product.title.includes(filter) ||
-	// 				product.description.includes(filter)
-	// 			);
-	// 		});
-	// 		return filteredProducts;
-	// 	} catch (error) {
-	// 		throw error;
-	// 	}
-	// }
 }
