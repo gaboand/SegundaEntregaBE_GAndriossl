@@ -39,18 +39,14 @@ export default class ProductsManager {
 	async getPaginatedProducts(filter = {}) {
 		try {
 			if (fs.existsSync(this.#filePath)) {
-				const products = JSON.parse(await fs.promises.readFile(this.#filePath, "utf-8"));
-	
-				return {
-					docs: products,
-					totalDocs: products.length,
-				};
-			}
-			return { docs: [] };
-		} catch (error) {
-			throw error;
-		}
-	}
+				let products = JSON.parse(await fs.promises.readFile(this.#filePath, "utf-8"));
+				return { products }; 
+        }
+        return { products: [] };
+    } catch (error) {
+        throw error;
+    }
+}
 
 	async getProductsById(id) {
 		try {

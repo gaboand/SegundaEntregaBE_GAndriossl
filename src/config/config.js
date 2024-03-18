@@ -1,1 +1,1 @@
-export const PERSISTENCE = "fs";
+export const PERSISTENCE = "MONGO";

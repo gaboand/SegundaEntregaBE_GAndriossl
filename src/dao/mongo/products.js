@@ -13,8 +13,8 @@ export default class ProductDB {
     async getPaginatedProducts(filter) {
         try {
             filter.options.lean = true;
-            const product = await ProductsModel.paginate(filter.query, filter.options);
-            return product;
+            const result = await ProductsModel.paginate(filter.query, filter.options);
+            return { products: result.docs };
         } catch (error) {
             throw error;
         }

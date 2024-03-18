@@ -20,8 +20,7 @@ const getProducts = async (req, res) => {
         }
         const productsData = await productsDao.getPaginatedProducts(filter);
 
-        const { docs } = productsData; 
-        const products = docs;
+        const { products } = productsData;
         if (products.length < 1) {
             res.status(404).json({
                 success: false,
