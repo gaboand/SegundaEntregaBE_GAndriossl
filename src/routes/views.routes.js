@@ -5,6 +5,9 @@ import MessageDB from "../controllers/chat.controler.js";
 import ProductsManager from "../dao/memory/productManager.js";
 import CartsManager from "../dao/memory/productManager.js";
 import passport from "passport";
+import {productsDao} from "../dao/index.js";
+import { cartsDao } from "../dao/index.js";
+
 
 const viewsRouter = Router();
 const cartDB = new CartDB();
@@ -28,7 +31,8 @@ viewsRouter.get("/products", async (req, res) => {
         }
     };
         try {
-            const products = await productDB.getPaginatedProducts(filter);
+            const products = await productsDao.getPaginatedProducts(filter);
+
             res.render("products", {
                 title: "Listado de productos",
                 products: products,

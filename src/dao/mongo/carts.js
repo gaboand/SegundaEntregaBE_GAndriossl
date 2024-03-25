@@ -20,9 +20,23 @@ export default class CartDB {
     }
     };
     
-    async getCartWithProductDetails(cartId) {
+    async getCartById(id) {
         try {
-            const cart = await CartModel.findById(cartId).populate({
+            const cart = await CartModel.findById(id).lean();
+    
+            if (!cart) {
+                throw new Error("Carrito no encontrado");
+            }
+    
+            return cart;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getCartWithProductDetails(id) {
+        try {
+            const cart = await CartModel.findById(id).populate({
                 path: "products.productId",
                 model: "products"
             }).lean();
@@ -65,9 +79,9 @@ export default class CartDB {
     }
     }
 
-    async deleteProductFromCart(cartId, productEntryId) {
+    async deleteProductFromCart(id, productEntryId) {
         try {
-            const cart = await CartModel.findById(cartId);
+            const cart = await CartModel.findById(id);
             const productIndex = cart.products.findIndex(p => p._id.equals(productEntryId));
             if (productIndex >= 0) {
                 cart.products.splice(productIndex, 1);
@@ -81,9 +95,9 @@ export default class CartDB {
         }
     }
     
-    async emptyCart(cartId) {
+    async emptyCart(id) {
         try {
-            const cart = await CartModel.findById(cartId);
+            const cart = await CartModel.findById(id);
             cart.products = [];
             const updatedCart = await cart.save();
             return updatedCart;
@@ -106,9 +120,9 @@ export default class CartDB {
         }
     }
 
-    async updateProductQuantity(cartId, productId, quantity) {
+    async updateProductQuantity(id, productId, quantity) {
         try {
-            const cart = await CartModel.findById(cartId);
+            const cart = await CartModel.findById(id);
             if (!cart) {
                 throw new Error('Carrito no encontrado');
             }

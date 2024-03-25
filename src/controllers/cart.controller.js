@@ -15,6 +15,19 @@ const saveCart = async (req, res) => {
 			message: error.message,
 		});
 	}
+}
+
+const findById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const cart = await cartsDao.getCartById(id);
+        if (!cart) {
+            return res.status(404).send("Carrito no encontrado");
+        }
+        res.json(cart);
+    } catch (error) {
+        res.status(500).send("Error al recuperar el carrito: " + error.message);
+    }
 };
 
 const getCarts = async (req, res) => {
@@ -182,4 +195,4 @@ const updateQuantity = async (req, res) => {
     }
 };
 
-export { saveCart, getCarts, getCartDetails, addProduct, deleteProduct, empty, deleteCart, updateQuantity };
+export { saveCart, getCarts, getCartDetails, addProduct, deleteProduct, empty, deleteCart, updateQuantity, findById };

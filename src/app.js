@@ -33,7 +33,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: DB_URL,
       mongoOptions: {
-        useNewUrlParser: true,
+        // useNewUrlParser: true,
       },
       ttl: 3600,
     }),
