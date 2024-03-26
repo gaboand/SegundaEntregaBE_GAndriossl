@@ -1,5 +1,5 @@
 import express from "express";
-import UserModel from "../dao/mongo/models/user.model.js";;
+import {UserModel} from "../dao/mongo/models/user.model.js";;
 import { auth } from "../middlewares/index.js";
 import { createHash, isValidPassword, generateToken, passportCall, authorization } from "../utils.js";
 import passport from "passport";

@@ -1,6 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
-import User from "../dao/mongo/models/user.model.js";
+import { UserModel } from "../dao/mongo/models/user.model.js";
 import { CartModel } from "../dao/mongo/models/carts.model.js"; 
 import { createHash, isValidPassword } from "../utils.js";
 
@@ -17,7 +17,7 @@ const initializePassport = () => {
       async (req, username, password, done) => {
         const { first_name, last_name, email, age } = req.body;
         try {
-          const user = await User.findOne({ email: username });
+          const user = await UserModel.findOne({ email: username });
           if (user) {
             return done(null, false, { message: "El usuario ya existe" });
           }
@@ -33,7 +33,7 @@ const initializePassport = () => {
             cartId: newCart._id, 
           };
 
-          const result = await User.create(newUser);
+          const result = await UserModel.create(newUser);
           return done(null, result);
         } catch (error) {
           return done("Error al crear el usuario", error);
@@ -47,7 +47,7 @@ const initializePassport = () => {
   });
 
   passport.deserializeUser(async (id, done) => {
-    let user = await User.findById(id);
+    let user = await UserModel.findById(id);
     done(null, user);
   });
 
@@ -61,7 +61,7 @@ const initializePassport = () => {
       },
       async (req, username, password, done) => {
         try {
-          const user = await User.findOne({ email: username });
+          const user = await UserModel.findOne({ email: username });
           if (!user) {
             return done(null, false, { message: "Usuario no encontrado" });
           }

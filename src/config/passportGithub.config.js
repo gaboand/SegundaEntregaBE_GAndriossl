@@ -1,5 +1,5 @@
 import passport from "passport";
-import User from "../dao/mongo/models/user.model.js";
+import { UserModel } from "../dao/mongo/models/user.model.js";
 import { CartModel } from "../dao/mongo/models/carts.model.js";
 import GitHubStrategy from "passport-github2";
 
@@ -22,7 +22,7 @@ const initializePassportGH = () => {
               return done(new Error("No se pudo obtener el correo electrónico de GitHub."), null);
             }
 
-            let user = await User.findOne({ email: email });
+            let user = await UserModel.findOne({ email: email });
             if (!user) {
               const newCart = await CartModel.create({});
               user = new User({ 
@@ -51,7 +51,7 @@ const initializePassportGH = () => {
   
     passport.deserializeUser(async (id, done) => {
       try {
-        const user = await User.findById(id);
+        const user = await UserModel.findById(id);
         done(null, user);
       } catch (err) {
         done(err, null);
